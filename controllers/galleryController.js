@@ -1,26 +1,26 @@
 import galleryModel from "../models/gallery.js";
 import categoryModel from "../models/category.js";
 class galleryController {
-  static uploadImage = async (req, res) => {
-    const { category } = req.body;
-    try {
-      if (category) {
-        const addImage = galleryModel({
-          name: req.file.filename,
-          category: category,
-        });
-
-        const saved_image = await addImage.save();
-        if (saved_image) {
-          return res.status(200).json({ message: "file upload successfully" });
+    static uploadImage = async (req, res) => {
+      const { category, url } = req.body;
+      try {
+        if (category && url) {
+          const addImage = galleryModel({
+            url: url,
+            category: category,
+          });
+  
+          const saved_image = await addImage.save();
+          if (saved_image) {
+            return res.status(200).json({ message: "Image saved successfully" });
+          }
+        } else {
+          return res.status(400).json({ message: "All fields are required" });
         }
-      } else {
-        return res.status(400).json({ message: "all fields are required" });
+      } catch (error) {
+        return res.status(400).json({ message: error.message });
       }
-    } catch (error) {
-      return res.status(400).json({ message: error.message });
-    }
-  };
+    };
 
   static addNewCategory = async (req, res) => {
     const { name } = req.body;
