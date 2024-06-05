@@ -2,24 +2,13 @@ import galleryModel from "../models/gallery.js";
 import categoryModel from "../models/category.js";
 class galleryController {
     static uploadImage = async (req, res) => {
-      let { category, url } = req.body;
+      const { category, url } = req.body;
       try {
         if (category && url) {
-          let addImage;
-          if(url.includes('/file/d/')){
-            const fileId = (url.split('/file/d/')[1].split('/')[0]);
-            url = `https://drive.google.com/uc?export=view&id=${fileId}`;
-            addImage = galleryModel({
-              url: url,
-              category: category,
-            });
-          }
-          else{
-            addImage = galleryModel({
-              url: url,
-              category: category,
-            });
-          }
+          const addImage = galleryModel({
+            url: url,
+            category: category,
+          });
   
           const saved_image = await addImage.save();
           if (saved_image) {
